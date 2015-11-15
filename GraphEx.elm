@@ -6,6 +6,7 @@ import GraphPoints exposing (rangeX, rangeY)
 import GraphTimeSeries exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
+import Color exposing (..)
 import Text
 import Time exposing ( every )
 import Random exposing (..)
@@ -18,7 +19,7 @@ model =
   {
     rseed = initialSeed 99333, 
     point_list = points,
-    element = (collage 1200 900 []) 
+    element = (collage 1100 300 []) 
   }
 
 main : Signal Element
@@ -33,20 +34,22 @@ main =
         case Array.get ((Array.length pList) - 1) pList of 
           Just (etime, edata) -> 
             { y | element <-  
-              (collage 1200 900
+              (collage 1100 300
                 (
                    [ 
-                     (xdash rX),
-                     (ydash rY),
+--                     (xdash rX),
+--                     (ydash rY),
                      (title "My Testing Graph" 20),
-                     (drawPoints y.point_list rX rY)
+                     (drawLine y.point_list rX rY),
+                     (drawFill y.point_list rX rY)
                    ] |> xtitle rX 
                      |> ytitle rY
+                     |> drawCircle y.point_list rX rY
+                     |> background 1100 300 
                  )
                ),
                rseed <- seed,
-    --           point_list <- ((Time.inMilliseconds x), random) :: y.point_list
                point_list <- pList |>  Array.push (etime + 60000, random) |> Array.slice 1 (Array.length pList + 1) |>  Array.toList
              }
           _ -> y
-       ) model (every 100))
+       ) model (every 1000))

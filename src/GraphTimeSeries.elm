@@ -1,4 +1,4 @@
-module GraphTimeSeries (xdash, ydash, releativePosY, releativePosX, drawPoints, xtitle, ytitle, title)  where
+module GraphTimeSeries (xdash, ydash, releativePosY, releativePosX, drawLine, xtitle, ytitle, title, drawCircle, background, drawFill)  where
 
 import GraphPoints exposing (rangeX, rangeY, Range, Point)
 import Color exposing (..)
@@ -15,11 +15,14 @@ import Text exposing (defaultStyle)
 
 textStyle: Text.Style
 textStyle = 
-  { defaultStyle |  height <-  Just 20 }
+  { defaultStyle |  
+        height <-  Just 20,
+        color  <-  red
+  }
 
 tickStyle: Text.Style
 tickStyle = 
-  { defaultStyle |  height <-  Just 10 }
+  { defaultStyle |  height <-  Just 10, color <- (rgb 200 200 200) }
 
 
 drawSpec: { width : Float, height : Float, inc : Float }
@@ -58,16 +61,29 @@ releativePosY y =
 title: String -> Float -> Form 
 title str size = 
   let 
-    style = { defaultStyle |  height <-  Just size }
+    style = { defaultStyle |  height <-  Just size, color <- (rgb 200 200 200) }
   in
-    (text (Text.style  style  (Text.fromString "Testing Graph"))) |> move (releativePosX (drawSpec.width / 2) ,  releativePosY drawSpec.height + 20)
+    (text (Text.style  style  (Text.fromString "Testing Graph"))) |> move (releativePosX (drawSpec.width / 2) ,  releativePosY drawSpec.height + 40)
 
+drawCircle: List (Float, Float) -> Range -> Range -> List Form -> List Form
+drawCircle points rX rY init = 
+  (List.foldl (\x i -> 
+            case x of 
+              (xA, yA) -> 
+                let 
+                  xPos = (newValue rX { min = releativePosX 0, max = releativePosX drawSpec.width } xA)
+                  yPos = (newValue rY { min = releativePosY 0, max = releativePosY drawSpec.height } yA)
+                  p = circle 4 |> filled (rgba 245 54 54 1) |>  move (xPos, yPos)
+                in
+                  p :: i
+   ) init  points)
+  
 
-drawPoints: List (Float, Float) -> Range -> Range -> Form
-drawPoints points rX rY = 
+drawFill: List (Float, Float) -> Range -> Range -> Form
+drawFill points rX rY  = 
   let 
-      p =  (rX.min, rY.min) :: points
-      pos = (List.map (\x -> 
+    p =  (rX.min, rY.min) :: points
+    pos = (List.map (\x -> 
                 case x of 
                   (xA, yA) -> 
                     (
@@ -75,9 +91,26 @@ drawPoints points rX rY =
                       newValue rY { min = releativePosY 0, max = releativePosY drawSpec.height } yA
                     )
         ) p)
+    outLineStyle = solid (rgba 245 54 54 1)
   in 
-    filled (rgba 22 22 99 0.2) (polygon (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ]))
---    outlined (solid (rgba 255 22 99 0.2)) (polygon (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ]))
+    filled (rgba 245 54 54 0.4) (polygon (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ]))
+
+
+
+drawLine: List (Float, Float) -> Range -> Range -> Form
+drawLine points rX rY = 
+  let 
+    pos = (List.map (\x -> 
+                case x of 
+                  (xA, yA) -> 
+                    (
+                      newValue rX { min = releativePosX 0, max = releativePosX drawSpec.width } xA, 
+                      newValue rY { min = releativePosY 0, max = releativePosY drawSpec.height } yA
+                    )
+        ) points)
+    outLineStyle = solid (rgba 245 54 54 1)
+  in 
+    traced { outLineStyle | width <- 2 } (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ])
 
 ydash: Range -> Form
 ydash range = 
@@ -152,6 +185,9 @@ xformat x =
     else
       p
 
+background: Float -> Float -> List Form -> List Form 
+background height width list = 
+ (filled black (rect height width)) :: list
 
 xtitle: Range -> List Form -> List Form 
 xtitle range list = 
@@ -170,23 +206,3 @@ xtitlespoints point end inc range list =
     in
       dText :: xtitlespoints { x = point.x + inc, y =  point.y } end inc range list
 
-points : List (Float, Float)
-points =
-  [ (1447357860000,0),(1447357920000,136718),(1447357980000,142695),(1447358040000,139104),(1447358100000,141398),(1447358160000,147652),(1447358220000,144264),(1447358280000,139539),(1447358340000,149566),(1447358400000,150078),(1447358460000,167734),(1447358520000,165021),(1447358580000,163600),(1447358640000,162649),(1447358700000,138100),(1447358760000,155245),(1447358820000,160275),(1447358880000,158258),(1447358940000,165195),(1447359000000,168657),(1447359060000,174462),(1447359120000,191707),(1447359180000,163421),(1447359240000,174038),(1447359300000,177712),(1447359360000,172363),(1447359420000,173849),(1447359480000,187460),(1447359540000,155155),(1447359600000,140025),(1447359660000,151682),(1447359720000,0)]
-
-main : Element
-main =
-  let 
-      rX = rangeX points
-      rY = rangeY points
-  in 
-    collage 1200 900
-    (
-       [ 
-         (xdash rX),
-         (ydash rY),
-         (text (Text.style  textStyle  (Text.fromString "Testing Graph"))) |> move (releativePosX (drawSpec.width / 2) ,  releativePosY drawSpec.height + 20),
-         (drawPoints points rX rY)
-       ] |> xtitle rX 
-         |> ytitle rY
-     )
