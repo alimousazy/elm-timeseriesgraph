@@ -45,6 +45,8 @@ main =
                    ] |> xtitle rX 
                      |> ytitle rY
                      |> drawCircle y.point_list rX rY
+                     |> yLine rY 
+                     |> xLine rY 
                      |> background 1100 300 
                  )
                ),

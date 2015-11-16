@@ -1,4 +1,4 @@
-module GraphTimeSeries (xdash, ydash, releativePosY, releativePosX, drawLine, xtitle, ytitle, title, drawCircle, background, drawFill)  where
+module GraphTimeSeries (xdash, ydash, releativePosY, releativePosX, drawLine, xtitle, ytitle, title, drawCircle, background, drawFill, yLine, xLine)  where
 
 import GraphPoints exposing (rangeX, rangeY, Range, Point)
 import Color exposing (..)
@@ -112,6 +112,35 @@ drawLine points rX rY =
   in 
     traced { outLineStyle | width <- 2 } (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ])
 
+yLine : Range -> List Form -> List Form
+yLine range list = 
+  let
+    inc = abs (newValue range { min = 0, max = drawSpec.height } 50000)
+    end =  (releativePosY drawSpec.height) + inc
+  in
+    yLinepoints { x = releativePosX 0, y = releativePosY 0 } end inc list 
+
+yLinepoints: Point -> Float -> Float -> List Form -> List Form
+yLinepoints point end inc list = 
+  if end < point.y then
+    list 
+  else
+    traced (solid (rgba 200 200 200 0.2)) (path [(point.x, point.y), (drawSpec.width, point.y)]) :: 
+        (yLinepoints { y = point.y + inc, x =  point.x } end inc list)
+
+xLine: Range -> List Form -> List Form
+xLine range list = 
+  xLinepoints { x = releativePosX 0, y = releativePosY 0} (releativePosX drawSpec.width) drawSpec.inc list
+
+xLinepoints: Point -> Float -> Float -> List Form -> List Form 
+xLinepoints point end inc list = 
+  if end < point.x then
+    list 
+  else
+    traced (solid (rgba 200 200 200 0.2)) (path [(point.x, point.y), (point.x, drawSpec.height)]) ::
+      xLinepoints { x = point.x + inc, y =  point.y } end inc list
+
+
 ydash: Range -> Form
 ydash range = 
   let
@@ -134,7 +163,6 @@ ydashpoints point end inc =
 xdash: Range -> Form
 xdash range = 
   traced (solid red) (path (xdashpoints { x = releativePosX 0, y = releativePosY 0} (releativePosX drawSpec.width) drawSpec.inc))
-
 
 xdashpoints: Point -> Float -> Float ->  List (Float, Float)
 xdashpoints point end inc = 

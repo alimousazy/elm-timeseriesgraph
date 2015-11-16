@@ -1046,7 +1046,7 @@ Elm.GraphEx.make = function (_elm) {
                                        300,
                                        A2($GraphTimeSeries.background,
                                        1100,
-                                       300)(A3($GraphTimeSeries.drawCircle,
+                                       300)($GraphTimeSeries.xLine(rY)($GraphTimeSeries.yLine(rY)(A3($GraphTimeSeries.drawCircle,
                                        y.point_list,
                                        rX,
                                        rY)($GraphTimeSeries.ytitle(rY)($GraphTimeSeries.xtitle(rX)(_L.fromArray([A2($GraphTimeSeries.title,
@@ -1059,7 +1059,7 @@ Elm.GraphEx.make = function (_elm) {
                                                                                                                 ,A3($GraphTimeSeries.drawFill,
                                                                                                                 y.point_list,
                                                                                                                 rX,
-                                                                                                                rY)]))))))]
+                                                                                                                rY)]))))))))]
                                       ,["rseed",seed]
                                       ,["point_list"
                                        ,$Array.toList(A2($Array.slice,
@@ -1435,6 +1435,87 @@ Elm.GraphTimeSeries.make = function (_elm) {
                        ,_1: releativePosY(0)}])));
       }();
    });
+   var yLinepoints = F4(function (point,
+   end,
+   inc,
+   list) {
+      return _U.cmp(end,
+      point.y) < 0 ? list : A2($List._op["::"],
+      A2($Graphics$Collage.traced,
+      $Graphics$Collage.solid(A4($Color.rgba,
+      200,
+      200,
+      200,
+      0.2)),
+      $Graphics$Collage.path(_L.fromArray([{ctor: "_Tuple2"
+                                           ,_0: point.x
+                                           ,_1: point.y}
+                                          ,{ctor: "_Tuple2"
+                                           ,_0: drawSpec.width
+                                           ,_1: point.y}]))),
+      A4(yLinepoints,
+      {_: {}
+      ,x: point.x
+      ,y: point.y + inc},
+      end,
+      inc,
+      list));
+   });
+   var yLine = F2(function (range,
+   list) {
+      return function () {
+         var inc = $Basics.abs(A3(newValue,
+         range,
+         {_: {}
+         ,max: drawSpec.height
+         ,min: 0},
+         50000));
+         var end = releativePosY(drawSpec.height) + inc;
+         return A4(yLinepoints,
+         {_: {}
+         ,x: releativePosX(0)
+         ,y: releativePosY(0)},
+         end,
+         inc,
+         list);
+      }();
+   });
+   var xLinepoints = F4(function (point,
+   end,
+   inc,
+   list) {
+      return _U.cmp(end,
+      point.x) < 0 ? list : A2($List._op["::"],
+      A2($Graphics$Collage.traced,
+      $Graphics$Collage.solid(A4($Color.rgba,
+      200,
+      200,
+      200,
+      0.2)),
+      $Graphics$Collage.path(_L.fromArray([{ctor: "_Tuple2"
+                                           ,_0: point.x
+                                           ,_1: point.y}
+                                          ,{ctor: "_Tuple2"
+                                           ,_0: point.x
+                                           ,_1: drawSpec.height}]))),
+      A4(xLinepoints,
+      {_: {}
+      ,x: point.x + inc
+      ,y: point.y},
+      end,
+      inc,
+      list));
+   });
+   var xLine = F2(function (range,
+   list) {
+      return A4(xLinepoints,
+      {_: {}
+      ,x: releativePosX(0)
+      ,y: releativePosY(0)},
+      releativePosX(drawSpec.width),
+      drawSpec.inc,
+      list);
+   });
    var ydash = function (range) {
       return function () {
          var inc = $Basics.abs(A3(newValue,
@@ -1577,7 +1658,9 @@ Elm.GraphTimeSeries.make = function (_elm) {
                                  ,title: title
                                  ,drawCircle: drawCircle
                                  ,background: background
-                                 ,drawFill: drawFill};
+                                 ,drawFill: drawFill
+                                 ,yLine: yLine
+                                 ,xLine: xLine};
    return _elm.GraphTimeSeries.values;
 };
 Elm.Graphics = Elm.Graphics || {};
