@@ -26,7 +26,7 @@ main : Signal Element
 main =
   Signal.map (\x -> x.element) (Signal.foldp (\x y -> 
      let
-        (random, seed) = generate (float 100000 400000) y.rseed
+        (random, seed) = generate (float 100000 700000) y.rseed
         rX = rangeX y.point_list
         rY = rangeY y.point_list 
         pList = (Array.fromList y.point_list)
@@ -34,11 +34,11 @@ main =
         case Array.get ((Array.length pList) - 1) pList of 
           Just (etime, edata) -> 
             { y | element <-  
-              (collage 1100 300
+              (collage 1100 400
                 (
                    [ 
 --                     (xdash rX),
---                     (ydash rY),
+--                    (ydash rY),
                      (title "My Testing Graph" 20),
                      (drawLine y.point_list rX rY),
                      (drawFill y.point_list rX rY)
@@ -47,7 +47,7 @@ main =
                      |> drawCircle y.point_list rX rY
                      |> yLine rY 
                      |> xLine rY 
-                     |> background 1100 300 
+                     |> background 1100 400 
                  )
                ),
                rseed <- seed,

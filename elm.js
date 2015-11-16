@@ -1028,7 +1028,7 @@ Elm.GraphEx.make = function (_elm) {
          var $ = A2($Random.generate,
          A2($Random.$float,
          100000,
-         400000),
+         700000),
          y.rseed),
          random = $._0,
          seed = $._1;
@@ -1043,10 +1043,10 @@ Elm.GraphEx.make = function (_elm) {
                     return _U.replace([["element"
                                        ,A3($Graphics$Collage.collage,
                                        1100,
-                                       300,
+                                       400,
                                        A2($GraphTimeSeries.background,
                                        1100,
-                                       300)($GraphTimeSeries.xLine(rY)($GraphTimeSeries.yLine(rY)(A3($GraphTimeSeries.drawCircle,
+                                       400)($GraphTimeSeries.xLine(rY)($GraphTimeSeries.yLine(rY)(A3($GraphTimeSeries.drawCircle,
                                        y.point_list,
                                        rX,
                                        rY)($GraphTimeSeries.ytitle(rY)($GraphTimeSeries.xtitle(rX)(_L.fromArray([A2($GraphTimeSeries.title,
@@ -1196,13 +1196,15 @@ Elm.GraphTimeSeries.make = function (_elm) {
       return function () {
          var p = A2($Basics._op["++"],
          $Basics.toString($Date.hour(x)),
-         A2($Basics._op["++"],
-         ":",
-         $Basics.toString($Date.minute(x))));
+         ":");
          return _U.cmp($Date.minute(x),
          10) < 0 ? A2($Basics._op["++"],
          p,
-         "0") : p;
+         A2($Basics._op["++"],
+         "0",
+         $Basics.toString($Date.minute(x)))) : A2($Basics._op["++"],
+         p,
+         $Basics.toString($Date.minute(x)));
       }();
    };
    var yformat = function (str) {
@@ -1262,6 +1264,34 @@ Elm.GraphTimeSeries.make = function (_elm) {
       end,
       inc))));
    });
+   var xLinepoints = F5(function (point,
+   end,
+   inc,
+   height,
+   list) {
+      return _U.cmp(end,
+      point.x) < 0 ? list : A2($List._op["::"],
+      A2($Graphics$Collage.traced,
+      $Graphics$Collage.solid(A4($Color.rgba,
+      200,
+      200,
+      200,
+      0.3)),
+      $Graphics$Collage.path(_L.fromArray([{ctor: "_Tuple2"
+                                           ,_0: point.x
+                                           ,_1: point.y}
+                                          ,{ctor: "_Tuple2"
+                                           ,_0: point.x
+                                           ,_1: height}]))),
+      A5(xLinepoints,
+      {_: {}
+      ,x: point.x + inc
+      ,y: point.y},
+      end,
+      inc,
+      height,
+      list));
+   });
    var oldValue = F3(function (range,
    spec,
    newValue) {
@@ -1304,7 +1334,7 @@ Elm.GraphTimeSeries.make = function (_elm) {
          $Text.defaultStyle);
          return $Graphics$Collage.move({ctor: "_Tuple2"
                                        ,_0: releativePosX(drawSpec.width / 2)
-                                       ,_1: releativePosY(drawSpec.height) + 40})($Graphics$Collage.text(A2($Text.style,
+                                       ,_1: releativePosY(270)})($Graphics$Collage.text(A2($Text.style,
          style,
          $Text.fromString("Testing Graph"))));
       }();
@@ -1439,19 +1469,19 @@ Elm.GraphTimeSeries.make = function (_elm) {
    end,
    inc,
    list) {
-      return _U.cmp(end,
+      return _U.cmp(end + inc,
       point.y) < 0 ? list : A2($List._op["::"],
       A2($Graphics$Collage.traced,
       $Graphics$Collage.solid(A4($Color.rgba,
       200,
       200,
       200,
-      0.2)),
+      0.3)),
       $Graphics$Collage.path(_L.fromArray([{ctor: "_Tuple2"
                                            ,_0: point.x
                                            ,_1: point.y}
                                           ,{ctor: "_Tuple2"
-                                           ,_0: drawSpec.width
+                                           ,_0: releativePosX(drawSpec.width)
                                            ,_1: point.y}]))),
       A4(yLinepoints,
       {_: {}
@@ -1464,13 +1494,18 @@ Elm.GraphTimeSeries.make = function (_elm) {
    var yLine = F2(function (range,
    list) {
       return function () {
+         var end = releativePosY(A3(newValue,
+         range,
+         {_: {}
+         ,max: drawSpec.height
+         ,min: 0},
+         range.max));
          var inc = $Basics.abs(A3(newValue,
          range,
          {_: {}
          ,max: drawSpec.height
          ,min: 0},
          50000));
-         var end = releativePosY(drawSpec.height) + inc;
          return A4(yLinepoints,
          {_: {}
          ,x: releativePosX(0)
@@ -1480,41 +1515,31 @@ Elm.GraphTimeSeries.make = function (_elm) {
          list);
       }();
    });
-   var xLinepoints = F4(function (point,
-   end,
-   inc,
-   list) {
-      return _U.cmp(end,
-      point.x) < 0 ? list : A2($List._op["::"],
-      A2($Graphics$Collage.traced,
-      $Graphics$Collage.solid(A4($Color.rgba,
-      200,
-      200,
-      200,
-      0.2)),
-      $Graphics$Collage.path(_L.fromArray([{ctor: "_Tuple2"
-                                           ,_0: point.x
-                                           ,_1: point.y}
-                                          ,{ctor: "_Tuple2"
-                                           ,_0: point.x
-                                           ,_1: drawSpec.height}]))),
-      A4(xLinepoints,
-      {_: {}
-      ,x: point.x + inc
-      ,y: point.y},
-      end,
-      inc,
-      list));
-   });
    var xLine = F2(function (range,
    list) {
-      return A4(xLinepoints,
-      {_: {}
-      ,x: releativePosX(0)
-      ,y: releativePosY(0)},
-      releativePosX(drawSpec.width),
-      drawSpec.inc,
-      list);
+      return function () {
+         var yend = A3(newValue,
+         range,
+         {_: {}
+         ,max: drawSpec.height
+         ,min: 0},
+         range.max);
+         var yinc = $Basics.abs(A3(newValue,
+         range,
+         {_: {}
+         ,max: drawSpec.height
+         ,min: 0},
+         50000));
+         var height = releativePosY(yinc * $Basics.toFloat($Basics.ceiling(yend / yinc)));
+         return A5(xLinepoints,
+         {_: {}
+         ,x: releativePosX(0)
+         ,y: releativePosY(0)},
+         releativePosX(drawSpec.width),
+         drawSpec.inc,
+         height,
+         list);
+      }();
    });
    var ydash = function (range) {
       return function () {
@@ -1555,7 +1580,7 @@ Elm.GraphTimeSeries.make = function (_elm) {
    inc,
    range,
    list) {
-      return _U.cmp(end,
+      return _U.cmp(end + inc,
       point.y) < 0 ? list : function () {
          var m = yformat($Basics.toString($Basics.round(A3(oldValue,
          range,
@@ -1583,13 +1608,18 @@ Elm.GraphTimeSeries.make = function (_elm) {
    var ytitle = F2(function (range,
    list) {
       return function () {
+         var end = releativePosY(A3(newValue,
+         range,
+         {_: {}
+         ,max: drawSpec.height
+         ,min: 0},
+         range.max));
          var inc = $Basics.abs(A3(newValue,
          range,
          {_: {}
          ,max: drawSpec.height
          ,min: 0},
          50000));
-         var end = releativePosY(drawSpec.height) + inc;
          return A5(ytitlespoints,
          {_: {}
          ,x: releativePosX(0)

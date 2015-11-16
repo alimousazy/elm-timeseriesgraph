@@ -63,7 +63,7 @@ title str size =
   let 
     style = { defaultStyle |  height <-  Just size, color <- (rgb 200 200 200) }
   in
-    (text (Text.style  style  (Text.fromString "Testing Graph"))) |> move (releativePosX (drawSpec.width / 2) ,  releativePosY drawSpec.height + 40)
+    (text (Text.style  style  (Text.fromString "Testing Graph"))) |> move (releativePosX (drawSpec.width / 2) ,  releativePosY 270)
 
 drawCircle: List (Float, Float) -> Range -> Range -> List Form -> List Form
 drawCircle points rX rY init = 
@@ -116,29 +116,33 @@ yLine : Range -> List Form -> List Form
 yLine range list = 
   let
     inc = abs (newValue range { min = 0, max = drawSpec.height } 50000)
-    end =  (releativePosY drawSpec.height) + inc
+    end = (releativePosY (newValue range { min = 0, max = drawSpec.height } range.max)) 
   in
     yLinepoints { x = releativePosX 0, y = releativePosY 0 } end inc list 
 
 yLinepoints: Point -> Float -> Float -> List Form -> List Form
 yLinepoints point end inc list = 
-  if end < point.y then
+  if end + inc < point.y then
     list 
   else
-    traced (solid (rgba 200 200 200 0.2)) (path [(point.x, point.y), (drawSpec.width, point.y)]) :: 
+    traced (solid (rgba 200 200 200 0.3)) (path [(point.x, point.y), (releativePosX drawSpec.width, point.y)]) :: 
         (yLinepoints { y = point.y + inc, x =  point.x } end inc list)
 
 xLine: Range -> List Form -> List Form
 xLine range list = 
-  xLinepoints { x = releativePosX 0, y = releativePosY 0} (releativePosX drawSpec.width) drawSpec.inc list
+  let 
+    yinc = abs (newValue range { min = 0, max = drawSpec.height } 50000)
+    yend = newValue range { min = 0, max = drawSpec.height } range.max 
+    height = releativePosY (yinc * (toFloat (ceiling (yend / yinc))))
+  in
+    xLinepoints { x = releativePosX 0, y = releativePosY 0} (releativePosX drawSpec.width) drawSpec.inc height list
 
-xLinepoints: Point -> Float -> Float -> List Form -> List Form 
-xLinepoints point end inc list = 
+xLinepoints: Point -> Float -> Float -> Float -> List Form -> List Form 
+xLinepoints point end inc height list = 
   if end < point.x then
     list 
   else
-    traced (solid (rgba 200 200 200 0.2)) (path [(point.x, point.y), (point.x, drawSpec.height)]) ::
-      xLinepoints { x = point.x + inc, y =  point.y } end inc list
+    traced (solid (rgba 200 200 200 0.3)) (path [(point.x, point.y), (point.x, height)]) :: xLinepoints { x = point.x + inc, y =  point.y } end inc height list
 
 
 ydash: Range -> Form
@@ -178,13 +182,13 @@ ytitle: Range -> List Form -> List Form
 ytitle range list = 
   let
     inc = abs (newValue range { min = 0, max = drawSpec.height } 50000)
-    end =  (releativePosY drawSpec.height) + inc
+    end = releativePosY (newValue range { min = 0, max = drawSpec.height } range.max) 
   in
     ytitlespoints { x = releativePosX 0, y = releativePosY 0} end inc range list
 
 ytitlespoints: Point -> Float -> Float -> Range ->  List Form -> List Form 
 ytitlespoints point end inc range list = 
-  if end < point.y then
+  if end + inc < point.y then
     list 
   else
     let 
@@ -206,12 +210,12 @@ yformat str =
 xformat: Date.Date -> String
 xformat x = 
   let 
-    p =  (toString (Date.hour x)) ++ ":" ++ (toString (Date.minute x)) 
+    p =  (toString (Date.hour x)) ++ ":" 
   in 
     if Date.minute x < 10 then
-      p ++ "0"
+      p ++ "0" ++  (toString (Date.minute x)) 
     else
-      p
+      p ++ (toString (Date.minute x)) 
 
 background: Float -> Float -> List Form -> List Form 
 background height width list = 
