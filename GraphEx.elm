@@ -2,7 +2,7 @@ module GraphEx where
 
 import Array 
 import Debug 
-import GraphPoints exposing (rangeX, rangeY)
+import GraphPoints exposing (rangeX, rangeY, Points)
 import GraphTimeSeries exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
@@ -11,9 +11,13 @@ import Text
 import Time exposing ( every )
 import Random exposing (..)
 
-points : List (Float, Float)
+points : {color: Color, fillColor: Color , points: List(Float, Float)}
 points =
-  [ (1447357860000,0),(1447357920000,136718),(1447357980000,142695),(1447358040000,139104),(1447358100000,141398),(1447358160000,147652),(1447358220000,144264),(1447358280000,139539),(1447358340000,149566),(1447358400000,150078),(1447358460000,167734),(1447358520000,165021),(1447358580000,163600),(1447358640000,162649),(1447358700000,138100),(1447358760000,155245),(1447358820000,160275),(1447358880000,158258),(1447358940000,165195),(1447359000000,168657),(1447359060000,174462),(1447359120000,191707),(1447359180000,163421),(1447359240000,174038),(1447359300000,177712),(1447359360000,172363),(1447359420000,173849),(1447359480000,187460),(1447359540000,155155),(1447359600000,140025),(1447359660000,151682),(1447359720000,0)]
+  {
+    color = (rgba 245 54 54 1),
+    fillColor = (rgba 245 54 54 0.4),
+    points = [ (1447357860000,0),(1447357920000,136718),(1447357980000,142695),(1447358040000,139104),(1447358100000,141398),(1447358160000,147652),(1447358220000,144264),(1447358280000,139539),(1447358340000,149566),(1447358400000,150078),(1447358460000,167734),(1447358520000,165021),(1447358580000,163600),(1447358640000,162649),(1447358700000,138100),(1447358760000,155245),(1447358820000,160275),(1447358880000,158258),(1447358940000,165195),(1447359000000,168657),(1447359060000,174462),(1447359120000,191707),(1447359180000,163421),(1447359240000,174038),(1447359300000,177712),(1447359360000,172363),(1447359420000,173849),(1447359480000,187460),(1447359540000,155155),(1447359600000,140025),(1447359660000,151682),(1447359720000,0)]
+  }
 
 model = 
   {
@@ -27,9 +31,10 @@ main =
   Signal.map (\x -> x.element) (Signal.foldp (\x y -> 
      let
         (random, seed) = generate (float 100000 700000) y.rseed
-        rX = rangeX y.point_list
-        rY = rangeY y.point_list 
-        pList = (Array.fromList y.point_list)
+        rX = rangeX y.point_list.points
+        rY = rangeY y.point_list.points
+        point_list = y.point_list
+        pList = (Array.fromList y.point_list.points)
       in
         case Array.get ((Array.length pList) - 1) pList of 
           Just (etime, edata) -> 
@@ -37,8 +42,8 @@ main =
               (collage 1100 400
                 (
                    [ 
---                     (xdash rX),
---                    (ydash rY),
+                     (xdash rX Color.white),
+                     (ydash rY Color.white),
                      (title "My Testing Graph" 20),
                      (drawLine y.point_list rX rY),
                      (drawFill y.point_list rX rY)
@@ -51,7 +56,7 @@ main =
                  )
                ),
                rseed <- seed,
-               point_list <- pList |>  Array.push (etime + 60000, random) |> Array.slice 1 (Array.length pList + 1) |>  Array.toList
+               point_list <- { point_list | points <- pList |>  Array.push (etime + 60000, random) |> Array.slice 1 (Array.length pList + 1) |>  Array.toList }
              }
           _ -> y
        ) model (every 1000))

@@ -1,7 +1,12 @@
-module GraphPoints (rangeX, rangeY, Range, Point) where
+module GraphPoints (rangeX, rangeY, Range, Point, Points) where
+
+import Color exposing (Color)
 
 type alias Range =
   { min : Float, max : Float }
+
+type alias Points = 
+  {color: Color, fillColor: Color , points: List (Float, Float)}
 
 type alias Point =
   { x : Float, y : Float }

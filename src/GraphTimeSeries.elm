@@ -1,6 +1,6 @@
 module GraphTimeSeries (xdash, ydash, releativePosY, releativePosX, drawLine, xtitle, ytitle, title, drawCircle, background, drawFill, yLine, xLine)  where
 
-import GraphPoints exposing (rangeX, rangeY, Range, Point)
+import GraphPoints exposing (rangeX, rangeY, Range, Point, Points)
 import Color exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
@@ -65,7 +65,7 @@ title str size =
   in
     (text (Text.style  style  (Text.fromString "Testing Graph"))) |> move (releativePosX (drawSpec.width / 2) ,  releativePosY 270)
 
-drawCircle: List (Float, Float) -> Range -> Range -> List Form -> List Form
+drawCircle: Points -> Range -> Range -> List Form -> List Form
 drawCircle points rX rY init = 
   (List.foldl (\x i -> 
             case x of 
@@ -73,16 +73,16 @@ drawCircle points rX rY init =
                 let 
                   xPos = (newValue rX { min = releativePosX 0, max = releativePosX drawSpec.width } xA)
                   yPos = (newValue rY { min = releativePosY 0, max = releativePosY drawSpec.height } yA)
-                  p = circle 4 |> filled (rgba 245 54 54 1) |>  move (xPos, yPos)
+                  p = circle 4 |> filled points.color |>  move (xPos, yPos)
                 in
                   p :: i
-   ) init  points)
+   ) init  points.points)
   
 
-drawFill: List (Float, Float) -> Range -> Range -> Form
+drawFill: Points -> Range -> Range -> Form
 drawFill points rX rY  = 
   let 
-    p =  (rX.min, rY.min) :: points
+    p =  (rX.min, rY.min) :: points.points
     pos = (List.map (\x -> 
                 case x of 
                   (xA, yA) -> 
@@ -91,13 +91,12 @@ drawFill points rX rY  =
                       newValue rY { min = releativePosY 0, max = releativePosY drawSpec.height } yA
                     )
         ) p)
-    outLineStyle = solid (rgba 245 54 54 1)
   in 
-    filled (rgba 245 54 54 0.4) (polygon (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ]))
+    filled points.fillColor (polygon (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ]))
 
 
 
-drawLine: List (Float, Float) -> Range -> Range -> Form
+drawLine: Points -> Range -> Range -> Form
 drawLine points rX rY = 
   let 
     pos = (List.map (\x -> 
@@ -107,10 +106,10 @@ drawLine points rX rY =
                       newValue rX { min = releativePosX 0, max = releativePosX drawSpec.width } xA, 
                       newValue rY { min = releativePosY 0, max = releativePosY drawSpec.height } yA
                     )
-        ) points)
-    outLineStyle = solid (rgba 245 54 54 1)
+        ) points.points)
+    outLineStyle = solid points.color
   in 
-    traced { outLineStyle | width <- 2 } (List.append pos [ (releativePosX drawSpec.width, releativePosY 0) ])
+    traced { outLineStyle | width <- 2 } pos
 
 yLine : Range -> List Form -> List Form
 yLine range list = 
@@ -145,13 +144,13 @@ xLinepoints point end inc height list =
     traced (solid (rgba 200 200 200 0.3)) (path [(point.x, point.y), (point.x, height)]) :: xLinepoints { x = point.x + inc, y =  point.y } end inc height list
 
 
-ydash: Range -> Form
-ydash range = 
+ydash: Range -> Color -> Form
+ydash range color = 
   let
     inc = abs (newValue range { min = 0, max = drawSpec.height } 50000)
     end =  (releativePosY drawSpec.height) + inc
   in
-    traced (solid red) (path (ydashpoints { x = releativePosX 0, y = releativePosY 0 } end inc))
+    traced (solid color) (path (ydashpoints { x = releativePosX 0, y = releativePosY 0 } end inc))
 
 ydashpoints: Point -> Float -> Float ->  List (Float, Float)
 ydashpoints point end inc = 
@@ -164,9 +163,9 @@ ydashpoints point end inc =
     (ydashpoints { y = point.y + inc, x =  point.x } end inc)
 
 
-xdash: Range -> Form
-xdash range = 
-  traced (solid red) (path (xdashpoints { x = releativePosX 0, y = releativePosY 0} (releativePosX drawSpec.width) drawSpec.inc))
+xdash: Range -> Color -> Form
+xdash range color = 
+  traced (solid color) (path (xdashpoints { x = releativePosX 0, y = releativePosY 0} (releativePosX drawSpec.width) drawSpec.inc))
 
 xdashpoints: Point -> Float -> Float ->  List (Float, Float)
 xdashpoints point end inc = 
