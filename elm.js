@@ -902,6 +902,7 @@ Elm.GraphEx.make = function (_elm) {
    $moduleName = "GraphEx",
    $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
    $GraphPoints = Elm.GraphPoints.make(_elm),
    $GraphTimeSeries = Elm.GraphTimeSeries.make(_elm),
    $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
@@ -912,102 +913,113 @@ Elm.GraphEx.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $Time = Elm.Time.make(_elm);
-   var points = _L.fromArray([{ctor: "_Tuple2"
-                              ,_0: 1447357860000
-                              ,_1: 0}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447357920000
-                              ,_1: 136718}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447357980000
-                              ,_1: 142695}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358040000
-                              ,_1: 139104}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358100000
-                              ,_1: 141398}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358160000
-                              ,_1: 147652}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358220000
-                              ,_1: 144264}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358280000
-                              ,_1: 139539}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358340000
-                              ,_1: 149566}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358400000
-                              ,_1: 150078}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358460000
-                              ,_1: 167734}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358520000
-                              ,_1: 165021}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358580000
-                              ,_1: 163600}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358640000
-                              ,_1: 162649}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358700000
-                              ,_1: 138100}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358760000
-                              ,_1: 155245}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358820000
-                              ,_1: 160275}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358880000
-                              ,_1: 158258}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447358940000
-                              ,_1: 165195}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359000000
-                              ,_1: 168657}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359060000
-                              ,_1: 174462}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359120000
-                              ,_1: 191707}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359180000
-                              ,_1: 163421}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359240000
-                              ,_1: 174038}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359300000
-                              ,_1: 177712}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359360000
-                              ,_1: 172363}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359420000
-                              ,_1: 173849}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359480000
-                              ,_1: 187460}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359540000
-                              ,_1: 155155}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359600000
-                              ,_1: 140025}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359660000
-                              ,_1: 151682}
-                             ,{ctor: "_Tuple2"
-                              ,_0: 1447359720000
-                              ,_1: 0}]);
+   var points = {_: {}
+                ,color: A4($Color.rgba,
+                245,
+                54,
+                54,
+                1)
+                ,fillColor: A4($Color.rgba,
+                245,
+                54,
+                54,
+                0.4)
+                ,points: _L.fromArray([{ctor: "_Tuple2"
+                                       ,_0: 1447357860000
+                                       ,_1: 0}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447357920000
+                                       ,_1: 136718}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447357980000
+                                       ,_1: 142695}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358040000
+                                       ,_1: 139104}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358100000
+                                       ,_1: 141398}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358160000
+                                       ,_1: 147652}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358220000
+                                       ,_1: 144264}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358280000
+                                       ,_1: 139539}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358340000
+                                       ,_1: 149566}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358400000
+                                       ,_1: 150078}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358460000
+                                       ,_1: 167734}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358520000
+                                       ,_1: 165021}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358580000
+                                       ,_1: 163600}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358640000
+                                       ,_1: 162649}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358700000
+                                       ,_1: 138100}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358760000
+                                       ,_1: 155245}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358820000
+                                       ,_1: 160275}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358880000
+                                       ,_1: 158258}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447358940000
+                                       ,_1: 165195}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359000000
+                                       ,_1: 168657}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359060000
+                                       ,_1: 174462}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359120000
+                                       ,_1: 191707}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359180000
+                                       ,_1: 163421}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359240000
+                                       ,_1: 174038}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359300000
+                                       ,_1: 177712}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359360000
+                                       ,_1: 172363}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359420000
+                                       ,_1: 173849}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359480000
+                                       ,_1: 187460}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359540000
+                                       ,_1: 155155}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359600000
+                                       ,_1: 140025}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359660000
+                                       ,_1: 151682}
+                                      ,{ctor: "_Tuple2"
+                                       ,_0: 1447359720000
+                                       ,_1: 0}])};
    var model = {_: {}
                ,element: A3($Graphics$Collage.collage,
                1100,
@@ -1022,9 +1034,10 @@ Elm.GraphEx.make = function (_elm) {
    A3($Signal.foldp,
    F2(function (x,y) {
       return function () {
-         var pList = $Array.fromList(y.point_list);
-         var rY = $GraphPoints.rangeY(y.point_list);
-         var rX = $GraphPoints.rangeX(y.point_list);
+         var pList = $Array.fromList(y.point_list.points);
+         var point_list = y.point_list;
+         var rY = $GraphPoints.rangeY(y.point_list.points);
+         var rX = $GraphPoints.rangeX(y.point_list.points);
          var $ = A2($Random.generate,
          A2($Random.$float,
          100000,
@@ -1049,7 +1062,13 @@ Elm.GraphEx.make = function (_elm) {
                                        400)($GraphTimeSeries.xLine(rY)($GraphTimeSeries.yLine(rY)(A3($GraphTimeSeries.drawCircle,
                                        y.point_list,
                                        rX,
-                                       rY)($GraphTimeSeries.ytitle(rY)($GraphTimeSeries.xtitle(rX)(_L.fromArray([A2($GraphTimeSeries.title,
+                                       rY)($GraphTimeSeries.ytitle(rY)($GraphTimeSeries.xtitle(rX)(_L.fromArray([A2($GraphTimeSeries.xdash,
+                                                                                                                rX,
+                                                                                                                $Color.white)
+                                                                                                                ,A2($GraphTimeSeries.ydash,
+                                                                                                                rY,
+                                                                                                                $Color.white)
+                                                                                                                ,A2($GraphTimeSeries.title,
                                                                                                                 "My Testing Graph",
                                                                                                                 20)
                                                                                                                 ,A3($GraphTimeSeries.drawLine,
@@ -1062,11 +1081,13 @@ Elm.GraphEx.make = function (_elm) {
                                                                                                                 rY)]))))))))]
                                       ,["rseed",seed]
                                       ,["point_list"
-                                       ,$Array.toList(A2($Array.slice,
-                                       1,
-                                       $Array.length(pList) + 1)($Array.push({ctor: "_Tuple2"
-                                                                             ,_0: _v0._0._0 + 60000
-                                                                             ,_1: random})(pList)))]],
+                                       ,_U.replace([["points"
+                                                    ,$Array.toList(A2($Array.slice,
+                                                    1,
+                                                    $Array.length(pList) + 1)($Array.push({ctor: "_Tuple2"
+                                                                                          ,_0: _v0._0._0 + 60000
+                                                                                          ,_1: random})(pList)))]],
+                                       point_list)]],
                       y);}
                  break;}
             return y;
@@ -1093,6 +1114,7 @@ Elm.GraphPoints.make = function (_elm) {
    _L = _N.List.make(_elm),
    $moduleName = "GraphPoints",
    $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
@@ -1124,7 +1146,7 @@ Elm.GraphPoints.make = function (_elm) {
                  item._0,
                  A2(updateMin,item._0,init));}
             _U.badCase($moduleName,
-            "between lines 30 and 32");
+            "between lines 35 and 37");
          }();
       }),
       pointRange,
@@ -1140,7 +1162,7 @@ Elm.GraphPoints.make = function (_elm) {
                  item._1,
                  A2(updateMin,item._1,init));}
             _U.badCase($moduleName,
-            "between lines 37 and 39");
+            "between lines 42 and 44");
          }();
       }),
       pointRange,
@@ -1149,6 +1171,14 @@ Elm.GraphPoints.make = function (_elm) {
    var Point = F2(function (a,b) {
       return {_: {},x: a,y: b};
    });
+   var Points = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,color: a
+             ,fillColor: b
+             ,points: c};
+   });
    var Range = F2(function (a,b) {
       return {_: {},max: b,min: a};
    });
@@ -1156,7 +1186,8 @@ Elm.GraphPoints.make = function (_elm) {
                              ,rangeX: rangeX
                              ,rangeY: rangeY
                              ,Range: Range
-                             ,Point: Point};
+                             ,Point: Point
+                             ,Points: Points};
    return _elm.GraphPoints.values;
 };
 Elm.GraphTimeSeries = Elm.GraphTimeSeries || {};
@@ -1363,11 +1394,7 @@ Elm.GraphTimeSeries.make = function (_elm) {
                     x._0);
                     var p = $Graphics$Collage.move({ctor: "_Tuple2"
                                                    ,_0: xPos
-                                                   ,_1: yPos})($Graphics$Collage.filled(A4($Color.rgba,
-                    245,
-                    54,
-                    54,
-                    1))($Graphics$Collage.circle(4)));
+                                                   ,_1: yPos})($Graphics$Collage.filled(points.color)($Graphics$Collage.circle(4)));
                     return A2($List._op["::"],p,i);
                  }();}
             _U.badCase($moduleName,
@@ -1375,22 +1402,17 @@ Elm.GraphTimeSeries.make = function (_elm) {
          }();
       }),
       init,
-      points);
+      points.points);
    });
    var drawFill = F3(function (points,
    rX,
    rY) {
       return function () {
-         var outLineStyle = $Graphics$Collage.solid(A4($Color.rgba,
-         245,
-         54,
-         54,
-         1));
          var p = A2($List._op["::"],
          {ctor: "_Tuple2"
          ,_0: rX.min
          ,_1: rY.min},
-         points);
+         points.points);
          var pos = A2($List.map,
          function (x) {
             return function () {
@@ -1415,7 +1437,7 @@ Elm.GraphTimeSeries.make = function (_elm) {
          },
          p);
          return A2($Graphics$Collage.filled,
-         A4($Color.rgba,245,54,54,0.4),
+         points.fillColor,
          $Graphics$Collage.polygon(A2($List.append,
          pos,
          _L.fromArray([{ctor: "_Tuple2"
@@ -1427,11 +1449,7 @@ Elm.GraphTimeSeries.make = function (_elm) {
    rX,
    rY) {
       return function () {
-         var outLineStyle = $Graphics$Collage.solid(A4($Color.rgba,
-         245,
-         54,
-         54,
-         1));
+         var outLineStyle = $Graphics$Collage.solid(points.color);
          var pos = A2($List.map,
          function (x) {
             return function () {
@@ -1451,18 +1469,14 @@ Elm.GraphTimeSeries.make = function (_elm) {
                          ,min: releativePosY(0)},
                          x._1)};}
                _U.badCase($moduleName,
-               "between lines 104 and 110");
+               "between lines 103 and 109");
             }();
          },
-         points);
+         points.points);
          return A2($Graphics$Collage.traced,
          _U.replace([["width",2]],
          outLineStyle),
-         A2($List.append,
-         pos,
-         _L.fromArray([{ctor: "_Tuple2"
-                       ,_0: releativePosX(drawSpec.width)
-                       ,_1: releativePosY(0)}])));
+         pos);
       }();
    });
    var yLinepoints = F4(function (point,
@@ -1541,7 +1555,8 @@ Elm.GraphTimeSeries.make = function (_elm) {
          list);
       }();
    });
-   var ydash = function (range) {
+   var ydash = F2(function (range,
+   color) {
       return function () {
          var inc = $Basics.abs(A3(newValue,
          range,
@@ -1551,7 +1566,7 @@ Elm.GraphTimeSeries.make = function (_elm) {
          50000));
          var end = releativePosY(drawSpec.height) + inc;
          return A2($Graphics$Collage.traced,
-         $Graphics$Collage.solid($Color.red),
+         $Graphics$Collage.solid(color),
          $Graphics$Collage.path(A3(ydashpoints,
          {_: {}
          ,x: releativePosX(0)
@@ -1559,17 +1574,18 @@ Elm.GraphTimeSeries.make = function (_elm) {
          end,
          inc)));
       }();
-   };
-   var xdash = function (range) {
+   });
+   var xdash = F2(function (range,
+   color) {
       return A2($Graphics$Collage.traced,
-      $Graphics$Collage.solid($Color.red),
+      $Graphics$Collage.solid(color),
       $Graphics$Collage.path(A3(xdashpoints,
       {_: {}
       ,x: releativePosX(0)
       ,y: releativePosY(0)},
       releativePosX(drawSpec.width),
       drawSpec.inc)));
-   };
+   });
    var tickStyle = _U.replace([["height"
                                ,$Maybe.Just(10)]
                               ,["color"
